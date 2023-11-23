@@ -18,7 +18,8 @@ Age = input("> ")
 print("Please enter your gender:")
 Gender = input("> ")
 
-
+print("Please enter the year you are currently in:")
+Year = input("> ")
 
 print("Please enter the course you are currently pursuing:")
 Course = input("> ")
@@ -60,39 +61,39 @@ def run_memory():
         text10 = HTML("<h3>That is all! We wish you a good luck!</h3>")
         
         temp_display = display(text2, display_id=True)
-        time.sleep(1)
+        time.sleep(5)
         clear_output(wait=True)
         
         temp_display = display(text3, display_id=True)
-        time.sleep(1)
+        time.sleep(5)
         clear_output(wait=True)
         
         temp_display = display(text4, display_id=True)
-        time.sleep(1)
+        time.sleep(8)
         clear_output(wait=True)
         
         temp_display = display(text5, display_id=True)
-        time.sleep(1)
+        time.sleep(8)
         clear_output(wait=True)
         
         temp_display = display(text6, display_id=True)
-        time.sleep(1)
+        time.sleep(3)
         clear_output(wait=True)
         
         temp_display = display(text7, display_id=True)
-        time.sleep(1)
+        time.sleep(5)
         clear_output(wait=True)
         
         temp_display = display(text8, display_id=True)
-        time.sleep(1)
+        time.sleep(5)
         clear_output(wait=True)
         
         temp_display = display(text9, display_id=True)
-        time.sleep(1)
+        time.sleep(8)
         clear_output(wait=True)
         
         temp_display = display(text10, display_id=True)
-        time.sleep(1)
+        time.sleep(5)
         clear_output(wait=True)
                 
         clear_output()
@@ -140,7 +141,7 @@ def run_memory():
     
     for i, displayedarray in enumerate(arraypics):
         display(displayedarray)
-        time.sleep(1 if i < 2 else 2)
+        time.sleep(1 if i < 7 else 15)
         clear_output()
     
         for q in arrayqs[displayedarray]:
@@ -152,9 +153,8 @@ def run_memory():
     
     # Store each question and its answer as a separate variable
     q_and_a_list = []
-    for i, (q, a) in enumerate(zip(questions, answers), start=1):
-        q_and_a_list.append((f"q{i}", q))
-        q_and_a_list.append((f"q{i}ans", a))
+    for i, answer in enumerate(answers, start=1):
+        q_and_a_list.append((f"q{i}ans", answer))
 
     return q_and_a_list
 
@@ -170,7 +170,7 @@ def run_memory():
 q_and_a_list = run_memory()
 
 # Data dictionary setup
-data_dict = {"Name": Name, "Age": Age, "Gender": Gender, "Course": Course}
+data_dict = {"Name": Name, "Age": Age, "Gender": Gender, "Year": Year, "Course": Course}
 data_dict.update(dict(q_and_a_list))
 
 form_url = "https://docs.google.com/forms/d/e/1FAIpQLScqSgfGr31lvvgKkCHgXmcMd8jDg0QrzU0ocnTetF-Y_Zei5g/viewform?usp=sf_link"
@@ -181,8 +181,8 @@ def send_to_google_form(data_dict, form_url):
         You are not expected to follow the code within this function!
     '''
     form_id = form_url[34:90]
-    view_form_url = f'https://docs.google.com/forms/d/e/1FAIpQLScqSgfGr31lvvgKkCHgXmcMd8jDg0QrzU0ocnTetF-Y_Zei5g/viewform?usp=sf_link/viewform'
-    post_form_url = f'https://docs.google.com/forms/d/e/1FAIpQLScqSgfGr31lvvgKkCHgXmcMd8jDg0QrzU0ocnTetF-Y_Zei5g/viewform?usp=sf_link/formResponse'
+    view_form_url = 'https://docs.google.com/forms/d/e/1FAIpQLScqSgfGr31lvvgKkCHgXmcMd8jDg0QrzU0ocnTetF-Y_Zei5g/viewform?usp=sf_link'
+    post_form_url = 'https://docs.google.com/forms/d/e/1FAIpQLScqSgfGr31lvvgKkCHgXmcMd8jDg0QrzU0ocnTetF-Y_Zei5g/formResponse'
 
     page = requests.get(view_form_url)
     content = BeautifulSoup(page.content, "html.parser").find('script', type='text/javascript')
@@ -198,16 +198,11 @@ def send_to_google_form(data_dict, form_url):
             return False
         form_dict[f'entry.{item[4][0][0]}'] = data_dict[item[1]]
     
-    post_result = requests.post(post_form_url, data=data_dict)
+    post_result = requests.post(post_form_url, data=form_dict)
+    print(post_result.status_code, post_result.text)
     return post_result.ok
 
-print(data_dict)  # Add this line to check the data being sent
-
-# Call the function to send data to Google Form
-success = send_to_google_form(data_dict, "https://docs.google.com/forms/d/e/1FAIpQLScqSgfGr31lvvgKkCHgXmcMd8jDg0QrzU0ocnTetF-Y_Zei5g/viewform?usp=sf_link")
-print("Form submission successful" if success else "Form submission failed")
-
-             
+send_to_google_form(data_dict, form_url)
 
 
 
