@@ -5,4 +5,3 @@ ipywidgets
 jupyter_ui_poll
 IPython
 requests
-threading
