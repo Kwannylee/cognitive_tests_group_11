@@ -3,3 +3,7 @@ pandas
 matplotlib
 ipywidgets
 jupyter_ui_poll
+IPython.display
+requests
+time
+threading
