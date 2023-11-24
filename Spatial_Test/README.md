@@ -1,4 +1,31 @@
 # SpatialReasoning_Jupyter
+
+English:
+This application creates a spatial reasoning test. In the application, the user becomes familiar with the instructions, enters data, and solves five puzzles. Then the results are displayed, which are also saved in the cloud through the API to Google Sheets.
+
+The application aims to:
+
+- Create a simple GUI in a Jupyter notebook.
+- Collect user data - personal and related to the time spent on puzzles.
+- Produce puzzles live, not from photos.
+Written in object-oriented programming, the app is divided into several classes: 
+DataSaver - Manages the collection and storage of data. It gathers responses and other user information, then sends this data to a Google Sheets document.
+
+Timer - Manages the temporal aspects of the spatial reasoning task. It tracks how much time users spend on individual puzzles and on the entire task, and manages time limits.
+
+WindowManager - Controls the display of different windows in the user interface. Manages transitions between different task panels, such as starting the test, entering authentication data, showing puzzles, and ending the test.
+
+Panels - Responsible for creating and managing the various panels (user interface sections) displayed during the task. Each panel performs a specific function, such as welcoming participants, collecting authentication data, displaying puzzles, and showing the final message.
+
+PuzzleCreator - Generates puzzles for the spatial reasoning task. It contains the logic for creating various 3D puzzles and their 2D counterparts.
+
+Each class cooperates to provide an interactive and functional user experience during the task, from the beginning of the test to the final submission of responses and display of results. The classes are sorted quite randomly, but in such a way as to more or less allow easy tracking of threads.
+
+PROBLEM: The whole program works, but it has one flaw: if the user, stressed by time pressure, starts spamming the choice buttons A, B, C, D defined in the Panels class, method self.puzzle_panel, it will record an answer for a single puzzle several times. I tried disabling the button immediately after clicking, unsuccessfully. However, I have not tried using a flag that would disable the function. My suspicion is that the button does indeed turn off, but "after the fact", inside the function performing the task and after it has been clicked. Perhaps, therefore, the message about disabling the button is never returned from the function that handles the consequences of clicking the button.
+
+____________________________________________________
+
+Polish:
 ta aplikacja tworzy test na zdolności przestrzennego rozumowania
 w aplikacji użytkownik zapoznaje się z instrukcjami, wprowadza dane i rozwiązuje pięć łamigłówek.
 potem wyświetlają się wyniki, które zostają też zapisane w chmurze przez API do google sheets.
