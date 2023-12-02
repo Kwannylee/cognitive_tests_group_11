@@ -1,0 +1,3 @@
+link to voila app https://mybinder.org/v2/gh/Kwannylee/cognitive_tests_group_11.git/main?urlpath=voila/render/Spatial_Test/spatial_reasoning_task.ipynb
+link to my file https://mybinder.org/v2/gh/Kwannylee/cognitive_tests_group_11.git/main?labpath=%2FSpatial_Test%2Fspatial_reasoning_task.ipynb
+link to the entire repository https://mybinder.org/v2/gh/Kwannylee/cognitive_tests_group_11.git/main
