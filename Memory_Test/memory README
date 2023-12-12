@@ -1,0 +1,276 @@
+### IMPORTS
+
+from IPython.display import display, HTML, Image, clear_output
+import ipywidgets as widgets
+import random
+import time
+import requests
+import json
+from bs4 import BeautifulSoup
+from datetime import datetime
+
+### CREATING A DATAFRAME
+import pandas as pd
+class DataSaver:
+    def __init__(self):
+        self.answers_df = pd.DataFrame(columns=["question", "answer", "correct"])
+
+    ### Listing out input entries of the google forms questions from HTML inspection
+    def add_answer(self, question_index, answer, correct):
+        entry_ids = [
+            'entry.345106333', 'entry.2056774284', 'entry.88489882', 'entry.2074537292', 
+            'entry.824830590', 'entry.1991853079', 'entry.1791609048', 'entry.1769183941', 
+            'entry.1017624234', 'entry.946529900', 'entry.1872202882', 'entry.1173284681', 
+            'entry.1320073861', 'entry.122037573', 'entry.1238029063', 'entry.551102425', 
+            'entry.2090070351', 'entry.1929939824'
+        ]
+
+        
+        question_id = entry_ids[question_index]  # Use the entry ID based on question_index
+        new_row = pd.DataFrame([{ "question": question_id, "answer": answer, "correct": correct }])
+        self.answers_df = pd.concat([self.answers_df, new_row], ignore_index=True)
+
+
+
+    ### sending answers to google forms
+    def send_to_google_form(self, total_score, form_url):
+        # Prepare data dictionary
+        form_data = {row['question']: row['answer'] for _, row in self.answers_df.iterrows()}
+        form_data['entry.2142359515'] = total_score  # Correct entry ID for total score
+    
+        # Send data to Google Form
+        response = requests.post(form_url, data=form_data)
+        if response.status_code == 200:
+            print("Answers submitted successfully!")
+        else:
+            print(f"Failed to submit answers. Status code: {response.status_code}")
+        
+    
+
+
+### defining images as arrays
+array1 = Image("Array1.JPG", width = 1000)
+array2 = Image("Array2.JPG", width = 1000)
+array3 = Image("Array3.JPG", width = 1000)
+array4 = Image("Array4.JPG", width = 1000)
+array5 = Image("Array5.JPG", width = 1000)
+array6 = Image("Array6.JPG", width = 1000)
+
+### options for the dropdown widget
+color_options = ["blue", "green", "red", "purple", "orange", "yellow"]
+box_options = ["1", "2", "3"]
+shape_options = ["square", "triangle", "arrow", "plus sign", "star", "circle"]
+size_options = ["square", "arrow", "star", "plus sign", "circle"]  # Assuming these are size comparison options
+
+### writing out questions
+### allocationg the adequate set of options set above
+qs1 = {
+    "What is the color of the triangle?": color_options,
+    "In which box is the square located?": box_options,
+    "What is the color of the circle?": color_options
+}
+
+qs2 = {
+    "What is the color of the square?": color_options,
+    "In which box is the circle located?": box_options,
+    "In which box is the triangle located?": box_options  # Assuming the correct answer is a box number
+}
+
+qs3 = {
+    "Which one is bigger: the arrow or the square?": size_options,
+    "In which box is the star located?": box_options,
+    "What shape is in the same box as the triangle?": shape_options
+}
+
+qs4 = {
+    "Which one is bigger: the star or the plus sign?": size_options,
+    "In which box is the arrow located?": box_options,
+    "What shape is in the same box as the circle?": shape_options
+}
+
+qs5 = {
+    "What color is the square?": color_options,
+    "In which box is the circle?": box_options,
+    "What shape is in the same box as the star?": shape_options
+}
+
+qs6 = {
+    "Which one is bigger: the circle or the plus sign?": size_options,
+    "What shape is in the same box as the triangle?": shape_options,
+    "What shape is in the same box as the arrow?": shape_options
+}
+
+arrayqs = {array1 : qs1, array2 : qs2, array3 : qs3, array4 : qs4, array5 : qs5, array6 : qs6}
+
+# Correct answers for array1
+correct_answers_array1 = {
+    "What is the color of the triangle?": "blue",
+    "In which box is the square located?": "1",
+    "What is the color of the circle?": "green"
+}
+
+# Correct answers for array2
+correct_answers_array2 = {
+    "What is the color of the square?": "yellow",
+    "In which box is the circle located?": "3",
+    "In which box is the triangle located?": "2"
+}
+
+# Correct answers for array3
+correct_answers_array3 = {
+    "Which one is bigger: the arrow or the square?": "square",
+    "In which box is the star located?": "2",
+    "What shape is in the same box as the triangle?": "square"
+}
+
+# Correct answers for array4
+correct_answers_array4 = {
+    "Which one is bigger: the star or the plus sign?": "star",
+    "In which box is the arrow located?": "1",
+    "What shape is in the same box as the circle?": "plus sign"
+}
+
+# Correct answers for array5
+correct_answers_array5 = {
+    "What color is the square?": "green",
+    "In which box is the circle?": "2",
+    "What shape is in the same box as the star?": "arrow"
+}
+
+# Correct answers for array6
+correct_answers_array6 = {
+    "Which one is bigger: the circle or the plus sign?": "circle",
+    "What shape is in the same box as the triangle?": "square",
+    "What shape is in the same box as the arrow?": "square"
+}
+
+# Mapping each Image object to its correct answers
+image_correct_answers = {
+    array1: correct_answers_array1,
+    array2: correct_answers_array2,
+    array3: correct_answers_array3,
+    array4: correct_answers_array4,
+    array5: correct_answers_array5,
+    array6: correct_answers_array6
+}
+
+### matching the answers to the individual questions in google forms
+answers = {
+    'q1ans_mem': correct_answers_array1["What is the color of the triangle?"],  # For array1, question 1
+    'q2ans_mem': correct_answers_array1["In which box is the square located?"],  # For array1, question 2
+    'q3ans_mem': correct_answers_array1["What is the color of the circle?"],     # For array1, question 3
+    'q4ans_mem': correct_answers_array2["What is the color of the square?"],     # For array2, question 1
+    'q5ans_mem': correct_answers_array2["In which box is the circle located?"],  # For array2, question 2
+    'q6ans_mem': correct_answers_array2["In which box is the triangle located?"],# For array2, question 3
+    'q7ans_mem': correct_answers_array3["Which one is bigger: the arrow or the square?"],  # For array3, question 1
+    'q8ans_mem': correct_answers_array3["In which box is the star located?"],    # For array3, question 2
+    'q9ans_mem': correct_answers_array3["What shape is in the same box as the triangle?"], # For array3, question 3
+    'q10ans_mem': correct_answers_array4["Which one is bigger: the star or the plus sign?"], # For array4, question 1
+    'q11ans_mem': correct_answers_array4["In which box is the arrow located?"],  # For array4, question 2
+    'q12ans_mem': correct_answers_array4["What shape is in the same box as the circle?"],    # For array4, question 3
+    'q13ans_mem': correct_answers_array5["What color is the square?"],           # For array5, question 1
+    'q14ans_mem': correct_answers_array5["In which box is the circle?"],         # For array5, question 2
+    'q15ans_mem': correct_answers_array5["What shape is in the same box as the star?"],      # For array5, question 3
+    'q16ans_mem': correct_answers_array6["Which one is bigger: the circle or the plus sign?"], # For array6, question 1
+    'q17ans_mem': correct_answers_array6["What shape is in the same box as the triangle?"],    # For array6, question 2
+    'q18ans_mem': correct_answers_array6["What shape is in the same box as the arrow?"]        # For array6, question 3
+}
+
+### setting rules for the game
+def display_rules():
+    colors = ['blue', 'green', 'red', 'purple', 'orange']
+    circle_image = 'O.jpg'  
+    
+    text = "THE MEMORY TEST"
+    colored_text = ""
+
+    ### title of the memory test with a picture within the word
+    for char in text:
+        if char == 'O':
+            colored_text += f"<img src='{circle_image}' style='width: 24px; height: 24px;'/>"
+        else:
+            colored_text += f"<span style='color: {random.choice(colors)}'>{char}</span>"
+    
+    text1 = HTML(f"<h1>{colored_text}</h1>")
+    
+    ### rules that will be displayed
+    messages = [
+        "<h3>Hi! Before taking the memory test, we would first like to set some rules and introduce you to what you may expect!</h3>",
+        "<h3>This test consists of 6 rounds. In each round, an image with different shapes of different colors will be shown!</h3>",
+        "<h3>However, each image will be shown only for a limited period of time. Your goal is to memorise as much from the image as possible!</h3>",
+        "<h3>You will be asked questions about the shapes, including their position within the grid, their color or the shape they share the box with!</h3>",
+        "<h3>You will be marked based on the correctness of your answers. There is a time limit for the answers!</h3>",
+        "<h3>To ensure that you're really teasing your brain, we would like to ask you not to take pictures of the displayed images, nor to consult your answers with your peers.</h3>",
+        "<h3>That is all! We wish you a good luck!</h3>"]
+    
+        
+    for message in messages:
+        display(text1)
+        temp_display = display(HTML(message), display_id=True)
+        time.sleep(6)
+        clear_output(wait=True)
+
+    clear_output()
+    
+    
+display_rules()   
+
+
+form_url = "https://docs.google.com/forms/d/e/1FAIpQLSdrFPPmfIUiv6Wa5nCzMtVP0g9v7kDB9xNP4pWi-Vmr5F6eOA/formResponse"
+
+
+### displaying images (sleep for 10 seconds) 
+### displaying questions (time limit for 1 seconds)
+def display_image_and_questions(image, questions, correct_answers, input_time=15):
+    display(image)
+    time.sleep(10)  # Display each image for 10 second
+    clear_output(wait=True)
+
+    answers = []
+    count = 0
+    dropdowns = {q: widgets.Dropdown(options=opts, description=q) for q, opts in questions.items()}
+    for dropdown in dropdowns.values():
+        display(dropdown)
+
+    # Display a progress bar as a timer
+    progress = widgets.IntProgress(value=0, min=0, max=input_time, description='Time left:')
+    display(progress)
+
+    for i in range(input_time):
+        time.sleep(1)
+        progress.value += 1
+
+    # Collect answers
+    for question, dropdown in dropdowns.items():
+        answer = dropdown.value
+        answers.append((question, answer))
+        if answer == correct_answers[question]:
+            count += 1
+
+    clear_output(wait=True)
+    return count, answers
+
+### running the test and sending answers to google forms
+def run_memory_test(arrayqs, image_correct_answers, form_url):
+    data_saver = DataSaver()
+    total_score = 0
+    question_index = 0  # To keep track of question number
+
+    for image, questions in arrayqs.items():
+        score, answers = display_image_and_questions(image, questions, image_correct_answers[image])
+        total_score += score
+        for question, answer in answers:
+            correct = answer == image_correct_answers[image][question]
+            data_saver.add_answer(question_index, answer, correct)
+            question_index += 1
+
+    final_message = f"Memory test completed. You've scored {total_score} points."
+    print(final_message)
+
+    if data_saver.send_to_google_form(total_score, form_url):
+        print("Answers submitted successfully!")
+    else:
+        print("Failed to submit answers.")
+
+# Run the memory test
+run_memory_test(arrayqs, image_correct_answers, form_url)
