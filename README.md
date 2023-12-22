@@ -22,6 +22,7 @@
 #### Spatial_Test - consists of the Spatial Abilities test and all the required files. 
 #### Server_files - consists of the files necessary for running a website (more explained in the README within the folder)
 #### cover_sheet_g11.pdf - it is a filled pdf cover sheet filled as per requirements of the project
+#### Minutes_g11.pdf - it is a pdf consisting of the minutes for weeeks 6,9 and 10 for our group.
 
 ### Please find all the required information regarding the contents of the files within the repositories above, within README files. Because this group's project is extensive, for improved readibility we divided all of the descriptions into the folders where they are relevant.
 
