@@ -8,4 +8,10 @@ This test measures the approximate number sense of the test taker and uploads th
 
 # Test design
 
-64 images with dot ratios 4:3, 7:6, 9:8, 10:9 on 2 sides of the image are created. Dots are all the same size and do not overlap. Images are shown to the test taker in a random order, each only displayed for 0.73 second, and user will choose which side contains more dots as fast as they can (within 3 seconds) and click a corresponding button. The approximate number sense is judged by the accuracy of the user's answers. Trials which user doesn't respond within 3s are considered invalid and not recorded for results.
+64 images are created in order of dot ratios 4:3, 7:6, 9:8, 10:9 on each side of the image, with most dots on one side being 21, and least dots on one side being 9. Dots are all the same size and do not overlap. Then images are sorted so the first 32 images have more dots on the right side, and the next 32 images have more dots on the left side.
+
+Before the test, user's anonymized ID and sex is collected to store results to the individual and perform subsequent analysis.
+
+Images are shown to the test taker in a random order, each only displayed for 0.73 second, and user will choose which side contains more dots as fast as they can (within 3 seconds) and click a corresponding button. The image is checked in the lists storing image codes of more dots on the left or right to see if the button description is the correct choice, then searched in the values stored in dot ratio keys in a local dictionary 'Judge' to collect correctness for each dot ratio. The approximate number sense is judged by the accuracy of the user's answers. Trials which user doesn't respond within 3s are considered invalid and not recorded for results.
+
+All the results and user information are stored in a global dictionary 'outcome', which is uploaded to a google form if user gives consent at the end of the test.
