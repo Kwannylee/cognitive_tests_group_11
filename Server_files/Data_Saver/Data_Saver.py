@@ -5,7 +5,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 # Use creds to create a client to interact with the Google Drive API
 scope = ["https://spreadsheets.google.com/feeds", 'https://www.googleapis.com/auth/spreadsheets',
          "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive"]
-creds = ServiceAccountCredentials.from_json_keyfile_name('../../bios0030-responses-2cec3b215da8.json', scope)
+creds = ServiceAccountCredentials.from_json_keyfile_name('./bios0030-responses-87b07a1dcd4b.json', scope)
 client = gspread.authorize(creds)
 
 
@@ -37,12 +37,14 @@ def save_data(data):  # data is a dictionary
             spreadsheet = client.open("BIOS0030_SERVER_ANWERS_FINAL") # Open spreadsheet
             sheet = spreadsheet.sheet1 # Open sheet
 
-             # Find the first completely empty row
-            all_values = sheet.get_all_values() # Get all values
-            if not all_values:
+
+            all_values = sheet.get_all_values()  # Get all values
+            if not all_values:  # If the sheet is empty
                 sheet.update_cell(1, 1, "login_details")
-            if not "login_details" in all_values[0][0]: # Check if login_details is not in the first row and column
-                sheet.update_cell(1, 1, "login_details") # Add login_details as first column header if it is not in the first row and column
+                all_values = [['login_details']]  # Update all_values to reflect the change made to the sheet
+            elif not "login_details" in all_values[0]:  # Check if login_details is not in the first row
+                sheet.insert_row(["login_details"], 1)  # Insert login_details as first column header
+                all_values = sheet.get_all_values()  # Update all_values to reflect the change made to the sheet
             for key, value in data_to_save.items(): # Loop through all column names
                 if not key in all_values[0]: # Check if column name is not in the first row
                     sheet.update_cell(1, len(all_values[0])+1, key) # Add column name to the first row
